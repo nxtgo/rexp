@@ -3,47 +3,47 @@ package main
 import (
 	"fmt"
 
-	"github.com/elisiei/re"
+	"github.com/nxtgo/rexp"
 )
 
 // thanks chatgpt for these examples, i am too lazy.
 func main() {
 	// Basic exact match
-	exact := re.Exactly("hello")
-	reg := re.Create(exact)
+	exact := rexp.Exactly("hello")
+	reg := rexp.Create(exact)
 	fmt.Println("Exact:", reg.String())
 	fmt.Println("Match 'hello':", reg.MatchString("hello"))
 
 	// AnyOf / alternatives
-	alt := re.AnyOf("foo", "bar", "baz")
+	alt := rexp.AnyOf("foo", "bar", "baz")
 	fmt.Println("AnyOf:", alt.String())
-	reg = re.Create(alt)
+	reg = rexp.Create(alt)
 	fmt.Println("Match 'bar':", reg.MatchString("bar"))
 
 	// Optional, OneOrMore, ZeroOrMore
-	opt := re.Exactly("a").Optionally()
-	one := re.Exactly("b").OneOrMore()
-	zero := re.Exactly("c").ZeroOrMore()
-	reg = re.Create(opt, one, zero)
+	opt := rexp.Exactly("a").Optionally()
+	one := rexp.Exactly("b").OneOrMore()
+	zero := rexp.Exactly("c").ZeroOrMore()
+	reg = rexp.Create(opt, one, zero)
 	fmt.Println("Optional + OneOrMore + ZeroOrMore:", reg.String())
 	fmt.Println("Match 'abcc':", reg.MatchString("abcc"))
 	fmt.Println("Match 'b':", reg.MatchString("b"))
 
 	// Character classes
-	chars := re.CharIn("abc").OneOrMore()
-	reg = re.Create(chars)
+	chars := rexp.CharIn("abc").OneOrMore()
+	reg = rexp.Create(chars)
 	fmt.Println("CharIn:", reg.String())
 	fmt.Println("Match 'aabbc':", reg.MatchString("aabbc"))
 
-	charsNot := re.CharNotIn("xyz").OneOrMore()
-	reg = re.Create(charsNot)
+	charsNot := rexp.CharNotIn("xyz").OneOrMore()
+	reg = rexp.Create(charsNot)
 	fmt.Println("CharNotIn:", reg.String())
 	fmt.Println("Match 'abc':", reg.MatchString("abc"))
 	fmt.Println("Match 'xyz':", reg.MatchString("xyz"))
 
 	// Predefined helpers
-	helper := re.Digit().OneOrMore().As("digits")
-	reg = re.Create(helper)
+	helper := rexp.Digit().OneOrMore().As("digits")
+	reg = rexp.Create(helper)
 	fmt.Println("Digit OneOrMore As:", reg.String())
 	text := "My number is 12345"
 	match := reg.FindStringSubmatch(text)
@@ -58,43 +58,43 @@ func main() {
 	}
 
 	// Word, WordChar, WordBoundary, Whitespace
-	pattern := re.Word().And(re.Whitespace()).And(re.WordChar())
-	reg = re.Create(pattern)
+	pattern := rexp.Word().And(rexp.Whitespace()).And(rexp.WordChar())
+	reg = rexp.Create(pattern)
 	fmt.Println("Word + Whitespace + WordChar:", reg.String())
 	fmt.Println("Match 'hello x':", reg.MatchString("hello x"))
 
 	// Grouped, nested groups
-	grouped := re.Exactly("foo").Grouped().Or(re.Exactly("bar"))
-	reg = re.Create(grouped)
+	grouped := rexp.Exactly("foo").Grouped().Or(rexp.Exactly("bar"))
+	reg = rexp.Create(grouped)
 	fmt.Println("Grouped Or:", reg.String())
 	fmt.Println("Match 'bar':", reg.MatchString("bar"))
 
 	// Times
-	times := re.Exactly("ha").Times(3)
-	reg = re.Create(times)
+	times := rexp.Exactly("ha").Times(3)
+	reg = rexp.Create(times)
 	fmt.Println("Times 3:", reg.String())
 	fmt.Println("Match 'hahaha':", reg.MatchString("hahaha"))
 
 	// Line start/end
-	line := re.Exactly("start").AtLineStart().And(re.Exactly("end").AtLineEnd())
-	reg = re.Create(line)
+	line := rexp.Exactly("start").AtLineStart().And(rexp.Exactly("end").AtLineEnd())
+	reg = rexp.Create(line)
 	fmt.Println("Line start/end:", reg.String())
 	fmt.Println("Match 'startend':", reg.MatchString("startend"))
 	fmt.Println("Match 'start end':", reg.MatchString("start end"))
 
 	// Or chaining with Maybe
-	complex := re.Exactly("foo").And(re.Maybe("bar")).Or(re.Exactly("baz"))
-	reg = re.Create(complex)
+	complex := rexp.Exactly("foo").And(rexp.Maybe("bar")).Or(rexp.Exactly("baz"))
+	reg = rexp.Create(complex)
 	fmt.Println("Complex pattern:", reg.String())
 	fmt.Println("Match 'foobar':", reg.MatchString("foobar"))
 	fmt.Println("Match 'foo':", reg.MatchString("foo"))
 	fmt.Println("Match 'baz':", reg.MatchString("baz"))
 
 	// Full example with multiple named captures
-	full := re.Digit().OneOrMore().As("major").
-		And(re.Exactly(".").And(re.Digit().OneOrMore().As("minor"))).
-		And(re.Exactly(".").And(re.Digit().OneOrMore().As("patch")).Optionally())
-	reg = re.Create(full)
+	full := rexp.Digit().OneOrMore().As("major").
+		And(rexp.Exactly(".").And(rexp.Digit().OneOrMore().As("minor"))).
+		And(rexp.Exactly(".").And(rexp.Digit().OneOrMore().As("patch")).Optionally())
+	reg = rexp.Create(full)
 	fmt.Println("Semver pattern:", reg.String())
 	text = "Version 2.10.3"
 	m := reg.FindStringSubmatch(text)
