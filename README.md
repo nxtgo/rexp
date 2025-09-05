@@ -1,4 +1,4 @@
-# re
+# rexp
 
 chainable regexp builder inspired by [magic-regexp](https://regexp.dev/).
 
@@ -11,12 +11,12 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/elisiei/re"
+	"github.com/nxtgo/rexp"
 )
 
 func main() {
-	reg := re.Create(
-		re.Digit().OneOrMore().As("num"),
+	reg := rexp.Create(
+		rexp.Digit().OneOrMore().As("num"),
 	)
 
 	text := "version 123 released"
